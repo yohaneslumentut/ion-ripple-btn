@@ -76,12 +76,28 @@ export class YourCustomButtonComponent {
 
 
 ```
-  a.Use `ripple-btn` directive in your custom button. The `size` value is the buton size against it's container.
-  b.The `interval` is a limit of touch duration(ms) which determine touch is a press or tap.
-  c.There are 3 available event:
-    1. `btnTapped`
-    2. `btnPressed`,
-    3. `btnPressup`
-  d.If you want the ripple to be dark, use `darken` attribute in your button tag
 
+## Usage
 
+#### `ripple-btn`
+Use `ripple-btn` directive in your custom button. The `size` value is the buton size against it's container.
+
+#### `interval`
+The `interval` is a limit of touch duration(ms) which determine touch is a press or tap.
+
+#### `events`
+There are 3 available event:
+  1. `btnTapped`
+  2. `btnPressed`,
+  3. `btnPressup`
+
+#### `darken`
+If you want the ripple to be dark, use `darken` attribute in your button tag
+
+<br><br>
+## Contribution
+- **Having an issue**? or looking for support? [Open an issue](https://github.com/yohaneslumentut/ion-ripple-btn/issues/new) and we will get you the help you need.
+- Got a **new feature or a bug fix**? Fork the repo, make your changes, and submit a pull request.
+
+## Support this project
+If you find this project useful, please star the repo. Also, share it with friends and colleagues that might find this useful as well. Thank you :smile:
