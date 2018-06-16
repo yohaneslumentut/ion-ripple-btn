@@ -74,6 +74,9 @@ Now you're ready to use this module
 })
 export class YourCustomButtonComponent {
 
+...
+
+}
 
 ```
 
@@ -91,7 +94,7 @@ The `interval` is a limit of touch duration(ms) which determine touch is a press
 #### `events`
 There are 3 available events:
   1. `btnTapped`
-  2. `btnPressed`,
+  2. `btnPressed`
   3. `btnPressup`
 
 #### `darken`
