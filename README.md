@@ -34,10 +34,8 @@ Now you're ready to use this module
   </ion-navbar>
 </ion-header>
 ```
-2.Use `ripple-btn` directive in your custom button. The `size` value is the buton size against it's container.
-  The `interval` is a limit of touch duration(ms) which determine touch is a press or tap.
-  Thera are 3 available event `btnTapped`, `btnPressed`,`btnPressup`.
-  If you want the ripple to be dark, use `darken` attribute in your button tag
+
+2.Create your own button component
 
 ```ts
 ...
@@ -74,10 +72,16 @@ Now you're ready to use this module
     </div>
   `
 })
-export class YourCustomComponent {
+export class YourCustomButtonComponent {
 
 
 ```
-
+  a.Use `ripple-btn` directive in your custom button. The `size` value is the buton size against it's container.
+  b.The `interval` is a limit of touch duration(ms) which determine touch is a press or tap.
+  c.There are 3 available event:
+    1. `btnTapped`
+    2. `btnPressed`,
+    3. `btnPressup`
+  d.If you want the ripple to be dark, use `darken` attribute in your button tag
 
 
