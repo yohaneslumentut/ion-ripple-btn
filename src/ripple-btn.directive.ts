@@ -61,7 +61,7 @@ export class RippleBtnDirective {
 
   constructor( el: ElementRef, private renderer: Renderer) {
     this.el = el.nativeElement;
-    this.delay = ms => new Promise(_ => setTimeout(_, ms));
+    this.delay = (ms:number) => new Promise(_ => setTimeout(_, ms));
   }
 
   ngAfterViewInit() {
@@ -97,7 +97,7 @@ export class RippleBtnDirective {
     this.isActive = true;
   }
 
-  deactivate(ripple = null) {
+  deactivate(ripple:any) {
     if(ripple) ripple.remove();
     this.backgroundColor = this.nonactiveBackgroundColor;
     this.isActive = false;
@@ -113,7 +113,7 @@ export class RippleBtnDirective {
 
   tapping() { this.isTapping = true }
 
-  onTouchstart(e) {
+  onTouchstart(e:any) {
 
     this.resetting();
 
@@ -139,7 +139,7 @@ export class RippleBtnDirective {
     this.pressTimeoutRunning = false
   }
 
-  onTouchend(e) {
+  onTouchend(e:any) {
 
     if(this.pressTimeoutRunning) this.stopPressWatcher();
 
@@ -164,12 +164,12 @@ export class RippleBtnDirective {
   }
 
   pressUpHandler() {
-    this.delay(11).then(() => {if(!this.isAnimating) this.deactivate()}) // wait until ripple animated
+    this.delay(11).then(() => {if(!this.isAnimating) this.deactivate(null)}) // wait until ripple animated
   }
 
-  pressHandler(touchDuration) {
+  pressHandler(touchDuration:number) {
     this.pressing();
-    this.triggerRipple(touchDuration, (ripple, duration) => {
+    this.triggerRipple(touchDuration, (ripple:any, duration:number) => {
 
       this.delay(duration).then(() => this.btnPressed.emit(this.event))
 
@@ -183,15 +183,15 @@ export class RippleBtnDirective {
     });
   }
 
-  tapHandler(touchDuration) {
+  tapHandler(touchDuration:number) {
     this.tapping();
-    this.triggerRipple(touchDuration, (ripple, duration) => {
+    this.triggerRipple(touchDuration, (ripple:any, duration:number) => {
       // wait ripple animation ended
       this.delay(duration).then(() => this.removeTapRipple(ripple))
     });
   }
 
-  removeTapRipple(ripple) {
+  removeTapRipple(ripple:any) {
     // wait this.el fadeout completely
     this.delay(this.fadeDuration).then(() => {
       this.deactivate(ripple);
@@ -199,7 +199,7 @@ export class RippleBtnDirective {
     })
   }
 
-  triggerRipple(dTouch ,callback) {
+  triggerRipple(dTouch:number ,callback:any) {
   
     let btn = this.el;
     let rect = btn.getBoundingClientRect();

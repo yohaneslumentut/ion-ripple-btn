@@ -1,6 +1,6 @@
 {
   "name": "ion-ripple-btn",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Ripple Button for Ionic apps",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -43,7 +43,6 @@
   },
   "peerDependencies": {
     "ionic-angular": "^3.0.0",
-    "@angular/animations": "*",
-    "rxjs": "5.5.11"
+    "@angular/animations": "*"
   }
 }

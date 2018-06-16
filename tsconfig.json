@@ -1,28 +1,30 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "declaration": false,
+    "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
-      "dom",
-      "es2015"
+      "es6",
+      "dom"
     ],
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
+    "noEmitOnError": false,
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "rootDir": "src",
     "sourceMap": true,
-    "target": "es5"
+    "target": "es5",
+    "inlineSources": true
   },
-  "include": [
-    "src/**/*.ts"
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true
+  },
+  "files": [
+    "./src/index.ts"
   ],
   "exclude": [
-    "node_modules",
-    "src/**/*.spec.ts",
-    "src/**/__tests__/*.ts"
-  ],
-  "compileOnSave": false,
-  "atom": {
-    "rewriteTsconfig": false
-  }
+    "node_modules"
+  ]
 }

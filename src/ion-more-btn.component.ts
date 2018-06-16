@@ -45,7 +45,7 @@ export class IonMoreBtnComponent {
     // this.nav.pop();
   }
 
-  showTooltip(event) {
+  showTooltip(event: any) {
 
     let popover = this.popoverCtrl.create(IonMoreTooltipComponent);
 

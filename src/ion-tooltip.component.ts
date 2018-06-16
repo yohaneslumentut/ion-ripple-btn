@@ -16,7 +16,7 @@ export class IonTooltipComponent {
 
   ngAfterViewInit() {
 
-    const styles = {
+    const styles:any = {
       display: 'inline-block',
       whiteSpace: 'nowrap',
       minWidth: '56px',
