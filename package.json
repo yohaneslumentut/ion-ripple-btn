@@ -1,6 +1,6 @@
 {
   "name": "ion-ripple-btn",
-  "version": "0.0.6",
+  "version": "0.0.71",
   "description": "Ripple Button for Ionic apps",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

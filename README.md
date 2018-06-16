@@ -9,7 +9,7 @@ npm i ion-ripple-btn
 
 2.Import `IonRippleBtnModule` in your `@NgModule`.
 ```ts
-import { IonRippleBtnModule } from 'ionic-tooltips';
+import { IonRippleBtnModule } from 'ion-ripple-btn';
 
 @NgModule({
    ...
