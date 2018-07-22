@@ -58,4 +58,4 @@ import { RippleButtonComponent } from './ripple-button.component';
     IonToolbarBtnComponent
   ]
 })
-export class IonRippleBtnModule {}
+export class NgMdRippleModule {}

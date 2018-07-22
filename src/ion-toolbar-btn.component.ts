@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { RippleButtonComponent } from './ripple-button.component';
 
 @Component({
-  selector: 'ion-more-btn',
+  selector: 'ion-toolbar-btn',
   styles: [
     `:host {
       float: right;
       margin-right: -12px;
-      margin-left: -22px;
+      margin-left: -12px;
     }`,
     `:host button {
       color: #fff;
@@ -27,18 +27,15 @@ import { RippleButtonComponent } from './ripple-button.component';
       activeBgColor="{{ getActiveBgColor() }}"
       tapLimit="{{ getTapLimit() }}"
       tooltipText="{{ getTooltipText() }}"
+      ttClass="{{ getCssClass() }}"
+      ttPosition="bottomLeft"
       (_tap)="onTap($event)"
       (_press)="onPress($event)"
       (_pressup)="onPressup($event)"
     >
-      <ion-icon name="md-more"></ion-icon>
+      <ng-content></ng-content>
       <ng-container #rippleVc></ng-container>
     </button>
   `
 })
-export class IonMoreBtnComponent extends RippleButtonComponent {
-
-  getTooltipText() {
-    return this.tooltipText || 'More options'
-  }
-}
+export class IonToolbarBtnComponent extends RippleButtonComponent {}

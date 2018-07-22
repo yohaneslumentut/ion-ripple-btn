@@ -1,5 +1,7 @@
 # ion-ripple-btn
 
+An Ionic 3 material design ripple button module.
+
 ## Installation
 
 1.Install this module by running the following command:
@@ -24,85 +26,311 @@ Now you're ready to use this module
 
 ## Examples
 
-1.Use back button and more buton in ionic 3 navbar
+1.Use `ion-back-btn`, `ion-toolbar-btn`, and `ion-more-btn` in custom ionic 3 navbar `ion-nav-bar`
+
+```ts
+@Component({
+  ...
+  template: `
+    <ion-header>
+      <ion-nav-bar title={{pageTitle}} color={{navbarBgColor}}>
+        <ion-back-btn></ion-back-btn>
+        <ion-more-btn (btnTap)="showMoreDialog($event)" ></ion-more-btn>
+        <ion-toolbar-btn 
+          tooltipText="Voice Call"
+          ttClass="toolbar-tooltip"
+          (btnTap)="onTapVoiceCallBtn($event)"
+        >
+          <ion-icon name="md-call"></ion-icon>
+        </ion-toolbar-btn>
+        <ion-toolbar-btn 
+          tooltipText="Video Call"
+          ttClass="toolbar-tooltip"
+          (btnTap)="onTapVideoCallBtn($event)"
+        >
+          <ion-icon name="md-videocam"></ion-icon>
+        </ion-toolbar-btn>
+      </ion-navbar>
+    </ion-header>
+  ...
+})
+export class YourPageClass {
+
+  pageTitle: string = 'Your page name';
+  navbarBgColor: string = 'primary'
+
+  ...
+
+  showMoreDialog(event: any) {
+    ...
+  }
+
+  ...
+
+  onTapVideoCallBtn(event: any) {
+    ...
+  }
+
+  onTapVoiceCallBtn(event: any) {
+    ...
+  }
+
+  ...
+}
+
+```
+then create a custom tooltip styling (ttClass) in `your_project/src/app/app.scss` :
 
 ```html
-<ion-header>
-  <ion-navbar color="primary" [hideBackButton]="true">
-    <ion-back-btn></ion-back-btn>
-    <ion-more-btn></ion-more-btn>
-  </ion-navbar>
-</ion-header>
+  ...
+  .toolbar-tooltip {
+    border-radius: 40px;
+    height: 40px;
+    line-height: 3.2;
+    font-size: 13px;
+    background: #676A66;
+    min-width: 90px;
+    opacity: 0.9;
+    color: #fff;
+    margin-top: -8px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  ...
 ```
 
-2.Create your own button component
+2. Use `ion-ripple-btn` component directly
 
 ```ts
 ...
 
 @Component({
-  selector: 'your-selector',
+  ...
+  template: `
+    <ion-header>
+      ...
+    </ion-header>
+    <ion-content>
+      ...
+        <ion-ripple-btn cssClass="custom-btn" 
+          activeBgColor="rgba(0,0,0,0.1)"
+          rippleBgColor="rgba(0,0,0,0.05)"
+          ttPosition="right"
+          tooltipText="Hello world"
+        >
+          <ion-icon name="md-call"></ion-icon>
+        </ion-ripple-btn>
+      ...
+    </ion-content>
+  `
+})
+
+...
+
+```
+then create a custom button styling (cssClass) in `your_project/src/app/app.scss` :
+
+```html
+  ...
+  .custom-btn {
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+
+    ...
+
+    outline: none;
+    width: 100px;
+    height: 100px;
+  }
+  ...
+```
+
+3.Create your own navbar button component by using `ripple` directive. 
+
+```ts
+
+import { Component, ViewChild, ElementRef, ViewContainerRef } from '@angular/core';
+import { NavController } from 'ionic-angular';
+
+@Component({
+  selector: 'your-custom-back-btn',
   styles: [
-    `:host .wrapper-class {
+    `:host {
       float: left;
       margin-left: -10px;
     }`,
-    `:host .wrapper-class .ease-out { transition: background-color 0.4s ease-out; }`,
-    `:host .wrapper-class button {
-      position: relative;
+    `:host button {
       color: #fff;
       font-size: 2rem;
       font-weight: bold;
       border-radius: 100%;
       background-color: transparent;
+      position: relative;
+      overflow: hidden;
     }`
   ],
   template: `
-    <div class="wrapper-class">
-      <button ripple-btn
-        size="1.35"
-        interval="400"
-        containerClass="container-class"
-        wrapperClass="wrapper-class"
-        (btnTapped)="onTap()"
-        (btnPressup)="onPress()"
-      >
-        <ion-icon name="md-arrow-back"></ion-icon>
-      </button>
-    </div>
+    <button ripple containerClass="header" size="1.25"
+      fillTransition="700ms cubic-bezier(0.4, 0.0, 1, 1)"
+      releaseTransition="70ms cubic-bezier(0.4, 0.0, 0.2, 1)"
+      (_tap)="back()"
+      (_pressup)="back()"
+    >
+      <ion-icon name="md-arrow-back"></ion-icon>
+      <ng-container #rippleVc></ng-container>
+    </button>
   `
 })
-export class YourCustomButtonComponent {
+export class YourCustomBackBtnComponent {
 
-...
+  elRef:ElementRef
 
+  nav: any
+
+  @ViewChild("rippleVc", {read: ViewContainerRef}) rippleVc: ViewContainerRef;
+
+  constructor( _nav: NavController , _elRef: ElementRef){ 
+    this.elRef = _elRef
+    this.nav = _nav
+  }
+
+  back() {
+    this.nav.pop();
+  }
 }
 
 ```
 
-## Usage
+4.Create your own navbar button component by extending `RippleButtonComponent` , `ripple`directive and `tooltip-navbar` directive.
 
-#### `ripple-btn`
-Use `ripple-btn` directive to create your custom ripple button.
+```ts
 
-#### `size`
-The `size` value is the buton size against it's container.
+import { Component } from '@angular/core';
+import { RippleButtonComponent } from './ripple-button.component';
 
-#### `interval`
-The `interval` is a limit of touch duration(ms) which determine touch is a press or tap.
+@Component({
+  selector: 'your-custom-more-btn',
+  styles: [
+    `:host {
+      float: right;
+      margin-right: -12px;
+    }`,
+    `:host button {
+      color: #fff;
+      font-size: 2rem;
+      font-weight: bold;
+      border-radius: 100%;
+      background-color: transparent;
+      width: 78px;
+      height: 78px;
+      margin-top: -12px;
+      margin-bottom: -12px;
+    }`
+  ],
+  template: `
+    <button ripple tooltip-navbar
+      rippleBgColor="{{ getRippleBgColor() }}"
+      activeBgColor="{{ getActiveBgColor() }}"
+      tapLimit="{{ getTapLimit() }}"
+      tooltipText="{{ getTooltipText() }}"
+      (_tap)="onTap($event)"
+      (_press)="onPress($event)"
+      (_pressup)="onPressup($event)"
+    >
+      <ion-icon name="md-more"></ion-icon>
+      <ng-container #rippleVc></ng-container>
+    </button>
+  `
+})
+export class YourCustomMoreBtnComponent extends RippleButtonComponent {
 
-#### `events`
-There are 3 available events:
-  1. `btnTapped`
-  2. `btnPressed`
-  3. `btnPressup`
+  getTooltipText() {
+    return this.tooltipText || 'More options'
+  }
+}
 
-#### `darken`
-If you want the ripple to be dark, use `darken` attribute in your button tag
+```
+
+## Available Directive
+
+#### `ripple`
+Use `ripple` directive to create your custom ripple button
+
+#### `tooltip-navbar`
+Please use `tooltip-navbar` to implement tooltip of navbar ripple button.
+
+## Ripple Directive Available Inputs and attribute
+If you want to develop your own component by using `ripple` directive, you can use following inputs:
+
+#### `tapLimit`
+To distinguish touch end of a tap event and a pressup event, we use `tapLimit`
+
+#### `size` & `containerClass`
+When a header toolbar button need no exact size, you can use `size` and `containerClass` input. The `size` input is your button size against your container size and the `containerClass` is an identifier of your container.
+
+#### `rippleBgColor`
+You can customize your ripple background color use this input
+
+#### `activeBgColor`
+The `activeBgColor` is used to customize your button on active state
+
+#### `tooltipText`
+As input of your tooltip text
+
+#### `fillTransition`
+Ripple animation transition value when the ripple start to fill the button.<br>
+Example: `"700ms cubic-bezier(0.4, 0.0, 1, 1)"`
+
+#### `releaseTransition`
+Ripple animation transition value at touchend (ripple fast filling animation).<br>
+Example: `"70ms cubic-bezier(0.4, 0.0, 0.2, 1)"`
+
+#### `cssClass`
+To customize your host button using custom style in `your_project/src/app/app.scss`
+
+#### `draggableRipple`
+Please use this attribute to enable user drag the ripple
+
+## Specific Button Height
+For an exact buton height (h px) in a container with a determined height (cH px), you can use formula:<br>
+```html
+  margin-top = (h - cH)/2
+  margin-bottom = (h - cH)/2
+```
+
+## Available `events`
+For all descendant of `RippleButtonComponent` will have 3 legacy events:
+  1. `btnTap`
+  2. `btnPress`
+  3. `btnPressup` 
+
+## Custom Tooltip
+You can modify the `ion-ripple-btn` and `ion-toolbar-btn` tooltip style by using `ttClass` as example no.1 above.
+
+## Angular Version Error
+
+If you find error as follow:
+```html
+Typescript Error.
+Cannot redeclare block-scoped variable 'ngDevMode'.
+```
+it might because of your app angular version have a different version with this module.<br>
+To solve the problem, please update your `tsconfig.json` at root of your project with additional:
+```ts
+{
+  "compilerOptions": {
+    "baseUrl": "",
+    ...
+
+    "paths": { 
+      "@angular/*": ["node_modules/@angular/*"] 
+    }
+  },
+  ...
+
+} 
+```
+
 <br>
-## Contribution
-- **Having an issue**? or looking for support? [Open an issue](https://github.com/yohaneslumentut/ion-ripple-btn/issues/new) and we will get you the help you need.
-- Got a **new feature or a bug fix**? Fork the repo, make your changes, and submit a pull request.
-
-## Support this project
-If you find this project useful, please star the repo. Also, share it with friends and colleagues that might find this useful as well. Thank you :smile:  INDNJC@2018
+Thank you :smile:  INDNJC@2018
