@@ -99,7 +99,7 @@ then create a custom tooltip styling (ttClass) in `your_project/src/app/app.scss
   ...
 ```
 
-2. Use `ion-ripple-btn` component directly
+2.Use `ion-ripple-btn` component directly
 
 ```ts
 ...
@@ -207,7 +207,7 @@ export class YourCustomBackBtnComponent {
 ```ts
 
 import { Component } from '@angular/core';
-import { RippleButtonComponent } from './ripple-button.component';
+import { RippleButtonComponent } from 'ion-ripple-btn';
 
 @Component({
   selector: 'your-custom-more-btn',
@@ -307,6 +307,29 @@ For all descendant of `RippleButtonComponent` will have 3 legacy events:
 
 ## Custom Tooltip
 You can modify the `ion-ripple-btn` and `ion-toolbar-btn` tooltip style by using `ttClass` as example no.1 above.
+
+## Tooltip Position
+Default position tooltip  of `ion-ripple-btn` is at the bottom. You can use another tooltip position:
+  1. `top`
+  2. `topLeft`
+  3. `topRight`
+  4. `bottomLeft`
+  5. `bottomRight`
+  6. `left`
+  7. `right`
+
+Example:
+```html
+  <ion-ripple-btn
+    ...
+
+    ttPosition="bottomRight"
+    ...
+  >
+    ...
+
+  </ion-ripple-btn>
+```
 
 ## Angular Version Error
 
