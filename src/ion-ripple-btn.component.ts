@@ -40,7 +40,7 @@ export class IonRippleBtnComponent extends RippleButtonComponent  {
 
   onPress(event: any) {
     this.btnPress.emit(event)
-    this.showTooltip(event)
+    if(this.getTooltipText())this.showTooltip(event)
   }
 
   createTooltipElement() {
