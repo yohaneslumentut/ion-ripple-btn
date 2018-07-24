@@ -35,7 +35,12 @@ Now you're ready to use this module
     <ion-header>
       <ion-nav-bar color={{navbarBgColor}}>
         <ion-back-btn></ion-back-btn>
-        <ion-title-btn pageTitle={{pageTitle}} pageSubTitle={{pageSubtitle}}></ion-title-btn>
+        <ion-title-btn 
+          pageTitle={{pageTitle}} 
+          pageSubTitle={{pageSubtitle}}
+          (btnTap)="showTitleDetail($event)"
+          (btnPressup)="showTitleDetail($event)"
+        ></ion-title-btn>
         <ion-more-btn (btnTap)="showMoreDialog($event)" ></ion-more-btn>
         <ion-toolbar-btn 
           tooltipText="Voice Call"
@@ -67,13 +72,15 @@ export class YourPageClass {
     ...
   }
 
-  ...
-
   onTapVideoCallBtn(event: any) {
     ...
   }
 
   onTapVoiceCallBtn(event: any) {
+    ...
+  }
+
+  showTitleDetail(event: any) {
     ...
   }
 
