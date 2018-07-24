@@ -39,16 +39,18 @@ export class IonTitleBtnComponent extends RippleButtonComponent {
 
   @Input() pageTitle: string
   @Input() pageSubTitle: string
+  @Input() width: string = '170'
 
   ngAfterViewInit() {
     this.element = this.elRef.nativeElement.children[0];
     this.setClassName();
-    this.setHeight();
+    this.setDimension();
   }
 
-  setHeight() {
+  setDimension() {
     const container: any = this.element.children[0].closest('.' + "header");
     this.element.style.height = container.offsetHeight + 'px';
+    this.element.style.width = this.width + 'px'
   }
 
   getPageTitle() {
