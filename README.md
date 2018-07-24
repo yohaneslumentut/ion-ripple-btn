@@ -26,15 +26,16 @@ Now you're ready to use this module
 
 ## Examples
 
-1.Use `ion-back-btn`, `ion-toolbar-btn`, and `ion-more-btn` in custom ionic 3 navbar `ion-nav-bar`
+1.Use `ion-back-btn`, `ion-title-btn`, `ion-toolbar-btn`, and `ion-more-btn` in custom ionic 3 navbar `ion-nav-bar`
 
 ```ts
 @Component({
   ...
   template: `
     <ion-header>
-      <ion-nav-bar title={{pageTitle}} color={{navbarBgColor}}>
+      <ion-nav-bar color={{navbarBgColor}}>
         <ion-back-btn></ion-back-btn>
+        <ion-title-btn pageTitle={{pageTitle}} pageSubTitle={{pageSubtitle}}></ion-title-btn>
         <ion-more-btn (btnTap)="showMoreDialog($event)" ></ion-more-btn>
         <ion-toolbar-btn 
           tooltipText="Voice Call"
@@ -56,7 +57,8 @@ Now you're ready to use this module
 })
 export class YourPageClass {
 
-  pageTitle: string = 'Your page name';
+  pageTitle: string = 'Your Page Name';
+  pageSubtitle: string = 'page sub-title'
   navbarBgColor: string = 'primary'
 
   ...
@@ -79,7 +81,7 @@ export class YourPageClass {
 }
 
 ```
-then create a custom tooltip styling (ttClass) in `your_project/src/app/app.scss` :
+then create a custom tooltip styling (ttClass), title, and subtitle style in `your_project/src/app/app.scss` :
 
 ```html
   ...
@@ -95,6 +97,18 @@ then create a custom tooltip styling (ttClass) in `your_project/src/app/app.scss
     margin-top: -8px;
     padding-left: 15px;
     padding-right: 15px;
+  }
+
+  .page-title {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 500;
+  }
+
+  .page-subtitle {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 400;
   }
   ...
 ```
@@ -146,7 +160,8 @@ then create a custom button styling (cssClass) in `your_project/src/app/app.scss
   ...
 ```
 
-3.Create your own navbar button component by using `ripple` directive. 
+3.Create your own navbar button component by using `ripple` directive. <br>
+Note: Don't forget to add ripple container `<ng-container #rippleVc></ng-container>` at template and `@ViewChild("rippleVc", {read: ViewContainerRef}) rippleVc: ViewContainerRef` decorator at your class.
 
 ```ts
 

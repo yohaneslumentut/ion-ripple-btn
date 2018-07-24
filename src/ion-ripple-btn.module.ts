@@ -11,6 +11,7 @@ import { IonBackBtnComponent } from './ion-back-btn.component';
 import { IonRippleBtnComponent } from './ion-ripple-btn.component';
 import { IonMoreBtnComponent } from './ion-more-btn.component';
 import { IonToolbarBtnComponent } from './ion-toolbar-btn.component';
+import { IonTitleBtnComponent } from './ion-title-btn.component';
 import { RippleButtonComponent } from './ripple-button.component';
 
 @NgModule({
@@ -23,7 +24,8 @@ import { RippleButtonComponent } from './ripple-button.component';
     IonBackBtnComponent,
     IonRippleBtnComponent,
     IonMoreBtnComponent,
-    IonToolbarBtnComponent
+    IonToolbarBtnComponent,
+    IonTitleBtnComponent
   ],
   declarations: [
     IonNavBarComponent,
@@ -36,7 +38,8 @@ import { RippleButtonComponent } from './ripple-button.component';
     IonBackBtnComponent,
     IonRippleBtnComponent,
     IonMoreBtnComponent,
-    IonToolbarBtnComponent
+    IonToolbarBtnComponent,
+    IonTitleBtnComponent
   ],
   providers: [],
   imports: [
@@ -55,7 +58,8 @@ import { RippleButtonComponent } from './ripple-button.component';
     IonBackBtnComponent,
     IonRippleBtnComponent,
     IonMoreBtnComponent,
-    IonToolbarBtnComponent
+    IonToolbarBtnComponent,
+    IonTitleBtnComponent
   ]
 })
 export class IonRippleBtnModule {}
