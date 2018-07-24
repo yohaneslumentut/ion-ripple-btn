@@ -35,7 +35,8 @@ Now you're ready to use this module
     <ion-header>
       <ion-nav-bar color={{navbarBgColor}}>
         <ion-back-btn></ion-back-btn>
-        <ion-title-btn 
+        <ion-title-btn
+          width="170" 
           pageTitle={{pageTitle}} 
           pageSubTitle={{pageSubtitle}}
           (btnTap)="showTitleDetail($event)"
