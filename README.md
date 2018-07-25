@@ -36,7 +36,6 @@ Now you're ready to use this module
       <ion-nav-bar color={{navbarBgColor}}>
         <ion-back-btn></ion-back-btn>
         <ion-title-btn
-          width="170" 
           pageTitle={{pageTitle}} 
           pageSubTitle={{pageSubtitle}}
           (btnTap)="showTitleDetail($event)"
@@ -107,16 +106,20 @@ then create a custom tooltip styling (ttClass), title, and subtitle style in `yo
     padding-right: 15px;
   }
 
-  .page-title {
-    color: #fff;
-    font-size: 2rem;
-    font-weight: 500;
-  }
-
-  .page-subtitle {
-    color: #fff;
-    font-size: 1.2rem;
-    font-weight: 400;
+  ion-title-btn {
+    button {
+      color: #fff;
+      .page-title {
+        color: inherit;
+        font-size: 2rem;
+        font-weight: 500;
+      }
+      .page-subtitle {
+        color: inherit;
+        font-size: 1.2rem;
+        font-weight: 400;
+      }
+    }
   }
   ...
 ```
