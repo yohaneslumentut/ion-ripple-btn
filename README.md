@@ -56,7 +56,7 @@ Now you're ready to use this module
         >
           <ion-icon name="md-videocam"></ion-icon>
         </ion-toolbar-btn>
-      </ion-navbar>
+      </ion-nav-bar>
     </ion-header>
   ...
 })
