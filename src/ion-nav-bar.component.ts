@@ -2,6 +2,11 @@ import { Component, Input, ElementRef, ViewChild, ViewContainerRef } from '@angu
 
 @Component({
   selector: 'ion-nav-bar',
+  styles: [
+    `:host ion-navbar {
+      padding: 0px;
+    }`
+  ],
   template: `
     <ion-navbar color="{{bgColor}}" [hideBackButton]="true">
       <ng-content></ng-content>
