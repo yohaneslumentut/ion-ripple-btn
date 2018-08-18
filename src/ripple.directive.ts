@@ -193,7 +193,7 @@ export class RippleDirective {
     }
   }
 
-  setPressTimeout() { this.pressTimeout = setTimeout(() => { this.pressHandler() }, 700) }
+  setPressTimeout() { this.pressTimeout = setTimeout(() => { this.pressHandler() }, this.tapLimit) }
 
   onTouchend() {
     this.touchendTimeStamp = event.timeStamp;

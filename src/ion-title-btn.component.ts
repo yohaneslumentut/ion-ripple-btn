@@ -7,7 +7,6 @@ import { RippleButtonComponent } from './ripple-button.component';
     `:host {
       float: left;
       margin-left: -10px;
-      overflow: hidden;
     }`,
     `:host button {
       background-color: transparent;
@@ -15,8 +14,12 @@ import { RippleButtonComponent } from './ripple-button.component';
       margin-bottom: 0px;
       padding-left: 10px;
       text-align: left;
+    }`,
+    `:host button span {
+      display: block;
       white-space: nowrap;
       text-overflow: ellipsis;
+      overflow: hidden;
     }`
   ],
   template: `
@@ -29,7 +32,7 @@ import { RippleButtonComponent } from './ripple-button.component';
       (_press)="onPress($event)"
       (_pressup)="onPressup($event)"
     >
-      <span class="page-title">{{ pageTitle }}</span><br>
+      <span class="page-title">{{ pageTitle }}</span>
       <span class="page-subtitle">{{ pageSubTitle }}</span>
       <ng-container #rippleVc></ng-container>
     </button>
@@ -49,10 +52,10 @@ export class IonTitleBtnComponent extends RippleButtonComponent {
     _renderer2: Renderer2,
     _componentFactoryResolver: ComponentFactoryResolver
   ){
-    super(_elRef, _renderer2, _componentFactoryResolver)
+    super(_elRef, _renderer2, _componentFactoryResolver);
     this.elRef = _elRef;
     this.renderer = _renderer;
-    this.renderer.listen(window, 'resize', () => { this.onWindowResize() })
+    this.renderer.listen(window, 'resize', () => { this.onWindowResize() });
   }
 
   onWindowResize() { setTimeout(() => { this.setWidth() }, 0) }
@@ -64,7 +67,7 @@ export class IonTitleBtnComponent extends RippleButtonComponent {
   }
 
   setHeight() {
-    const container: any = this.element.children[0].closest('.' + "header");
+    const container: any = this.element.closest('.' + "header");
     this.element.style.height = container.offsetHeight + 'px';
   }
 
@@ -95,7 +98,7 @@ export class IonTitleBtnComponent extends RippleButtonComponent {
   }
 
   getToolbarChildren() {
-    const toolbar: any = this.elRef.nativeElement.children[0].closest('.' + "toolbar-content");
+    const toolbar: any = this.element.closest('.' + "toolbar-content");
     return toolbar.children;
   }
 }

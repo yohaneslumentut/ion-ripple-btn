@@ -77,7 +77,7 @@ export class RippleButtonComponent {
   }
 
   getTapLimit() {
-    return this.tapLimit || 400
+    return this.tapLimit || 700
   }
 
   getTooltipText() {
