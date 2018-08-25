@@ -5,8 +5,9 @@ import { RippleComponent } from './ripple.component';
 @Directive({
   selector: '[ripple]',
   host: {
-    '(touchend)': 'onTouchend($event)',
-    '(touchstart)': 'onTouchstart($event)'
+    '(touchstart)': 'onTouchstart($event)',
+    '(touchmove)': 'onTouchmove($event)',
+    '(touchend)': 'onTouchend($event)'
   }
 })
 export class RippleDirective {
@@ -39,7 +40,9 @@ export class RippleDirective {
   tooltipFadeTimeout: any
 
   _fillTransition: string
+  fillTransitionDuration: number
   _releaseTransition: string
+  releaseTransitionDuration: number
 
   @HostBinding('style.height') height: string
   @HostBinding('style.width') width: string
@@ -57,14 +60,6 @@ export class RippleDirective {
   @Input() fillTransition: string
   @Input() releaseTransition: string
   @Input() cssClass: string
-
-  @Input()
-  set draggableRipple(val:boolean) {
-    this._draggableRipple = typeof val !== 'boolean' || val != true
-  }
-  get draggableRipple(): boolean { return this._draggableRipple }
-
-  private _draggableRipple:boolean = false
 
   @Output() _tap: EventEmitter<any> = new EventEmitter();
   @Output() _press: EventEmitter<any> = new EventEmitter();
@@ -90,7 +85,6 @@ export class RippleDirective {
     this.setDimensions();
     this.setRippleBgColor();
     this.setTransition();
-    this.setDragAnimation();
   }
 
   getStyle() { this.style = getComputedStyle(this.el) }
@@ -125,14 +119,10 @@ export class RippleDirective {
   }
 
   setTransition() {
-    this._fillTransition = this.fillTransition || '700ms cubic-bezier(0.4, 0.0, 1, 1)'
+    this._fillTransition = this.fillTransition || '900ms'
+    this.fillTransitionDuration = parseInt(this._fillTransition.substring(0, this._fillTransition.indexOf('ms')))
     this._releaseTransition = this.releaseTransition || '90ms cubic-bezier(0.4, 0.0, 0.2, 1)'
-  }
-
-  setDragAnimation() {
-    const hammer = new (window as any)['Hammer'](this.el);
-    hammer.get('pan').set({ direction: (window as any)['Hammer'].DIRECTION_ALL });
-    hammer.on('pan', (ev: any) => { if(this._draggableRipple) this.onPan(ev) });
+    this.releaseTransitionDuration = parseInt(this._releaseTransition.substring(0, this._releaseTransition.indexOf('ms')))
   }
 
   playHostActiveAnimation() { 
@@ -179,11 +169,7 @@ export class RippleDirective {
     }
   }
 
-  onPan(ev: any) {
-    if(this.ripple && ev.distance < parseInt(this.style.width,10)/2)this.dragRipple(ev)
-  }
-
-  onTouchstart() {
+  onTouchstart(event: any) {
     this.event = event;
     this.touchstartTimeStamp = event.timeStamp;
     if(!this.isActive){
@@ -195,7 +181,40 @@ export class RippleDirective {
 
   setPressTimeout() { this.pressTimeout = setTimeout(() => { this.pressHandler() }, this.tapLimit) }
 
-  onTouchend() {
+  touchIsInRectArea(event: any): boolean {
+    const rect = this.el.getBoundingClientRect(),
+          ect = event.changedTouches[0],
+          touchX = ect.clientX,
+          touchY = ect.clientY;
+
+    if(rect.width === rect.height && this.style.borderRadius == '50%'){
+      const centerX = rect.left + (rect.width/2),
+            centerY = rect.top + (rect.height/2),
+            dx = touchX - centerX,
+            dy = touchY - centerY,
+            distsq = dx*dx + dy*dy,
+            rsq = (rect.width/2) * (rect.width/2);
+      return distsq < rsq;
+    } else {
+      const isInRangeX = rect.left < touchX && touchX < (rect.left + rect.width),
+            isInRangeY = rect.top < touchY && touchY < (rect.top + rect.height);
+      return(isInRangeX && isInRangeY);
+    }
+  }
+
+  onTouchmove(event: any) {
+    if(this.ripple && this.isActive){
+      if(this.touchIsInRectArea(event)){
+        this.dragRipple(event)
+      } else {
+        this.ripple.animation = this.ripple.releaseAnimation('50ms');
+        this.ripple.animation.play();
+        this.delay(90).then(()=>{ this.deactivateAndRemoveRipple() })
+      }
+    }
+  }
+
+  onTouchend(event: any) {
     this.touchendTimeStamp = event.timeStamp;
     let touchDuration = this.touchendTimeStamp - this.touchstartTimeStamp;
     if(this.isActive && this.touchstartTimeStamp !== 0 && touchDuration > 0){
@@ -203,8 +222,9 @@ export class RippleDirective {
       else this.tapHandler()
     }
     if(this.ripple){
-      this.ripple.releaseAnimation(this._releaseTransition);
-      this.delay(90).then(()=>{ this.deactivateAndRemoveRipple() })
+      this.ripple.animation = this.ripple.releaseAnimation(this._releaseTransition);
+      this.ripple.animation.play();
+      this.delay(this.releaseTransitionDuration).then(()=>{ this.deactivateAndRemoveRipple() })
     }
   }
 
@@ -217,7 +237,7 @@ export class RippleDirective {
 
   tapHandler() {
     if(this.pressTimeout) clearTimeout(this.pressTimeout)
-    this.delay(90).then(()=>{ this._tap.emit(this.event) });
+    this.delay(this.releaseTransitionDuration).then(()=>{ this._tap.emit(this.event) });
   }
 
   createRippleElement() {
@@ -230,32 +250,35 @@ export class RippleDirective {
 
     this.createRippleElement();
 
-    const rc: RippleComponent = this.rippleElement.instance,
-          ecTouch = this.event.changedTouches[0],
+    this.ripple = this.rippleElement.instance;
+
+    const ecTouch = this.event.changedTouches[0],
           rect = this.el.getBoundingClientRect(),
-          y  = ecTouch.pageY, x  = ecTouch.pageX;
-
-    let d: number = rect.height, mt: number = 0, ml:number = 0;
-
-    if(this.style.borderRadius < '70%'){
-      d = Math.sqrt((rect.width*rect.width) + (rect.height*rect.height));
-      mt = (rect.height-d)/2; ml = (rect.width-d)/2;
-    }
-
-    rc.init.then(() => {
-      rc.dimension = { width: d, height: d };
-      rc.position = { top: y - rect.height/2 - rect.top, left: x - rect.width/2 - rect.left, marginTop: mt, marginLeft: ml };
-      rc.background = this.rippleBackground;
-      rc.animate(this._fillTransition);
-      this.ripple = rc;
-    })
+          y  = ecTouch.pageY, x  = ecTouch.pageX,
+          d = Math.sqrt((rect.width*rect.width) + (rect.height*rect.height)),
+          mt = (rect.height-d)/2, ml = (rect.width-d)/2;
+ 
+    this.ripple.dimension = { width: d, height: d };
+    this.ripple.position = { top: y - rect.height/2 - rect.top, left: x - rect.width/2 - rect.left, marginTop: mt, marginLeft: ml };
+    this.ripple.background = this.rippleBackground;
+    this.ripple.fillDuration = this.fillTransitionDuration;
+    this.ripple.animation = this.ripple.animate(this._fillTransition);
+    this.ripple.animation.play();
   }
 
-  dragRipple(ev: any) {
+  dragRipple(event: any) {
     const rect = this.el.getBoundingClientRect(),
-          y  = ev.center.y, x  = ev.center.x,
+          rippleRect = this.ripple.element.getBoundingClientRect(),
+          x = event.touches[0].clientX, y = event.touches[0].clientY,
+          dx = rippleRect.width/2, dy = rippleRect.height/2,
           newTop = (y - rect.height/2 - rect.top) + 'px',
-          newLeft = (x - rect.width/2 - rect.left) + 'px';
-    this.ripple.dragAnimation(newLeft, newTop)
+          newLeft = (x - rect.width/2 - rect.left) + 'px',
+          isInRangeX = (x-dx) > rect.left && (x+dx) < (rect.left + rect.width),
+          isInRangeY = (y-dy) > rect.top && (y+dy) < (rect.top + rect.height);                                                                                                                                                                                                                                                                                                      
+
+    if(isInRangeX && isInRangeY) {
+      this.ripple.animation = this.ripple.dragAnimation(newLeft, newTop);
+      this.ripple.animation.play();
+    }
   }
 }

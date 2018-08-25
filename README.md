@@ -316,7 +316,7 @@ Example: `"70ms cubic-bezier(0.4, 0.0, 0.2, 1)"`
 To customize your host button using custom style in `your_project/src/app/app.scss`
 
 #### `draggableRipple`
-Please use this attribute to enable user drag the ripple
+Please use this attribute to enable user drag the ripple for version below 1.0.0. For version 1.0.1 up, all ripple are draggable, so no need draggabeleRipple input anymore. 
 
 ## Specific Button Height
 For an exact buton height (h px) in a container with a determined height (cH px), you can use formula:<br>

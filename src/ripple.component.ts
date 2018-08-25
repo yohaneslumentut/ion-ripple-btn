@@ -14,6 +14,16 @@ import { style, animate, keyframes, AnimationBuilder } from '@angular/animations
 })
 export class RippleComponent  {
 
+  element: HTMLElement
+  animation: any
+  transition: any
+  fillDuration: any
+  backgroundColor: string
+
+  private setStyle(prop: string, val: any) {
+    this.renderer.setStyle(this.element, prop, val);
+  }
+
   @Input()
   set dimension(o: any) {
     this.setStyle('width', o.width  + 'px'); this.setStyle('height', o.height  + 'px');
@@ -26,40 +36,22 @@ export class RippleComponent  {
   }
 
   @Input()
-  set background(color: string) { this._backgroundColor = color }
-
-  init: Promise<void>
-  animation: any
-  transition: any
-
-  private initResolve: Function;
-  private _backgroundColor: string
+  set background(color: string) { this.backgroundColor = color }
 
   constructor(
     public elementRef: ElementRef,
     private renderer: Renderer2,
     private _builder: AnimationBuilder,
   ) {
-    this.init = new Promise<void>(resolve => { this.initResolve = resolve });
+    this.element = elementRef.nativeElement;
   }
 
-  ngAfterViewInit() { this.initResolve() }
-
-  private setStyle(prop: string, val: any) {
-    this.renderer.setStyle(this.getNativeElement(), prop, val);
-  }
-
-  private getNativeElement(): HTMLElement {
-    return this.elementRef.nativeElement;
-  }
-
-  animate(transition: string) {
-
-    const animation = this._builder.build([
+  animate(transition: string): any {
+    return this._builder.build([
       animate(transition, keyframes([
         style({
-          background: this._backgroundColor,
-          transform: 'scale(0.1)',
+          background: this.backgroundColor,
+          transform: 'scale(0)',
           offset: 0
         }),
         style({
@@ -69,44 +61,32 @@ export class RippleComponent  {
           offset: 1.0
         })
       ]))
-    ]);
-
-    this.animation = animation.create(this.getNativeElement());
-    this.animation.play();
-
+    ]).create(this.element);
   }
 
-  releaseAnimation(transition: string) {
-
-    const animation = this._builder.build([
+  releaseAnimation(transition: string): any {
+    return this._builder.build([
       animate(transition ,style({
         transform: 'scale(1)',
         left: 0,
         top: 0
       }))
-    ]);
-
-    this.animation = animation.create(this.getNativeElement());
-    this.animation.play();
-
+    ]).create(this.element);
   }
 
-  dragAnimation(newLeft: string, newTop: string){
-
-    const animation = this._builder.build([
-      style({
-        left: newLeft,
-        top: newTop
-      }),
-      animate(700,style({
-        transform: 'scale(1)',
-        left: 0,
-        top: 0
-      }))
-    ]);
-
-    this.animation = animation.create(this.getNativeElement());
-    this.animation.play();
-
+  dragAnimation(newLeft: string, newTop: string): any{
+    return this._builder.build([
+      animate(this.fillDuration,keyframes([
+        style({
+          left: newLeft,
+          top: newTop
+        }),
+        style({
+          transform: 'scale(1)',
+          left: 0,
+          top: 0
+        })
+      ]))
+    ]).create(this.element);
   }
 }
